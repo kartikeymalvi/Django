@@ -1,0 +1,61 @@
+{% extends 'base.html'%}
+
+{% block title%} Register{% endblock %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+{% block content %}
+{{key1}}
+{{key2}}
+<form action="{% url 'register' %}" method="post" enctype="multipart/form-data" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; margin: 0 auto;">
+    {% csrf_token %}
+    <h2 style="text-align: center; margin-bottom: 20px;">Register</h2>
+
+    <label for="username" style="display:block; margin-top:10px;">Name:</label>
+    <input type="text" name="username" placeholder="Enter your name" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+
+    <label for="email" style="display:block; margin-top:10px;">Email:</label>
+    <input type="email" name="email" placeholder="Enter your email" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+
+    {% comment %} <label for="detail" style="display:block; margin-top:10px;">Description:</label>
+    <textarea name="detail" cols="20" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;"></textarea> {% endcomment %}
+
+    <label for="phone" style="display:block; margin-top:10px;">Contact:</label>
+    <input type="tel" name="phone" pattern="[0-9]{10}" maxlength="10" placeholder="Enter your phone number" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+
+    <label for="dob" style="display:block; margin-top:10px;">DOB:</label>
+    <input type="date" name="dob" min="2007-01-01" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+
+    
+
+    <label for="gender" style="display:block; margin-top:10px;">Gender:</label>
+    <div style="margin-top: 5px;">
+        <input type="radio" name="gender" value="male"> Male
+        <input type="radio" name="gender" value="female"> Female
+    </div>
+
+    <label for="profile-pic" style="display:block; margin-top:10px;">Profile-Pic:</label>
+    <input type="file" name="profile-pic" accept=".jpeg, .png" style="margin-top: 5px;">
+
+    {% comment %} <label for="resume" style="display:block; margin-top:10px;">Resume:</label>
+    <input type="file" name="resume" accept=".pdf, .doc" style="margin-top: 5px;"> {% endcomment %}
+
+    <label for="password" style="display:block; margin-top:10px;">Password:</label>
+    <input type="password" name="password" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+
+    <label for="cpassword" style="display:block; margin-top:10px;">Confirm Password:</label>
+    <input type="password" name="cpassword" style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+
+    <input type="submit" value="Submit" style="width: 100%; padding: 10px; margin-top: 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+
+</form>
+{% endblock %}
+
+</body>
+</html>

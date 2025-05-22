@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; align-items: center; padding: 40px; background-color: #f0f2f5; min-height: 100vh;">
+    <div style="background: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 600px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center;">
+        <h1 style="margin-bottom: 20px; color: #333;">Profile</h1>
+
+        <img src="{{userdata.image.url}}" alt="Profile Picture" style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover; margin-bottom: 20px;">
+
+        <div style="text-align: left; margin-top: 20px;">
+            <p><strong>Name:</strong> {{userdata.username}}</p>
+            <p><strong>Email:</strong> {{userdata.email}}</p>
+            <p><strong>Contact:</strong> {{userdata.phone}}</p>
+            {% comment %} <p><strong>Description:</strong> {{userdata.dis}}</p> {% endcomment %}
+            <p><strong>Date of Birth:</strong> {{userdata.dob}}</p>
+            {% comment %} <p><strong>Education:</strong> {{userdata.education}}</p> {% endcomment %}
+            {% comment %} <p><strong>User ID:</strong> {{userdata.id}}</p> {% endcomment %}
+
+            <hr style="margin: 20px 0;">
+
+             </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {{msg}}
+  <div class="login-container" style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0;">
+    <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; margin: 0 auto;">
+      <h2 style="text-align: center; margin-bottom: 20px;">Login</h2>
+      <form action="{% url 'logindata' %}" method="post">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Email" value="" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px;">
+        <input type="password" name="password" placeholder="Password" value="" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px;">
+        <input type="submit" value="Login" style="width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      </form>
+      <p style="text-align: center; margin-top: 15px;">Don't have an account? <a href="{% url 'register' %}" style="color: #007bff; text-decoration: none;">Register</a></p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block title %}Login Page{% endblock %}

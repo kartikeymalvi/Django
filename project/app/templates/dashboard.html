@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <div class="sidebar">
+        <img src="{{ userdata.image.url }}" alt="Profile Image" class="profile-img"> <br>
+        <p>{{userdata.username}}</p>
+        <a href="{% url 'home' %}" class="logout-btn">Logout</a>
+    </div>
+
+    <div class="navigation">
+        <h2>Navigate To</h2>
+        <form action="{% url 'search' pk=userdata.id %}" method="post">
+            {% csrf_token %}
+
+        search:<input type="search" name='search' value="none">
+        
+        search-by-name:<input type="search" name='name' value="none"><br>
+        search-by-date:<input type="search" name='date' value="none">
+        <input type="submit">
+        </form>
+        
+        
+        <ul>
+            <li><a href="{% url 'first_5' userdata.id %}">First 5 Trips</a></li>
+            <li><a href="{% url 'last_5' userdata.id %}">Last 5 Trips</a></li>
+            <li><a href="{% url 'all_stu' userdata.id %}">All Trips</a></li>
+            <li><a href="#"> Trips</a></li>
+            <li><a href="#"> Ascending Trips</a></li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <h2>Traveller Information</h2>
+
+        {% if updatedata  %}
+        <form action="{% url 'edit' pk=userdata.id  pk1=updatedata.id %}" method="post">
+            {% csrf_token %}
+           name: <input type="text" name="name" value="{{updatedata.username}}">
+           email: <input type="text" name="email" value="{{updatedata.email}}">
+            contact:<input type="text" name="contact" value="{{updatedata.contact}}">
+            date:<input type="date" name="dob" value="{{updatedata.dob}}">
+            
+            <input type="submit">
+        </form>
+        {% else %}
+        {% if data %}
+        <table>
+            <tr>
+                <th>Serial.No</th>
+                <th>name</th>
+                <th>Email</th>
+                <th>Trip-on</th>
+                <th colspan="2">Actions</th>
+            </tr>
+            {% for i in data %}
+           <tr> 
+            <td>{{forloop.counter}}</td>
+            <!-- <td>{{ i.id }}</td> -->
+            <td>{{ i.username }}</td>
+            <td>{{ i.email }}</td>
+            
+            <td>{{ i.dob }}</td>
+           <td> <a href="{% url 'update' pk=userdata.id pk1=i.id  %}" class="btn btn-primary">Update</a></td>
+            <td><a href="{% url 'delete' pk=userdata.id pk1=i.id %}" class="btn btn-danger" onclick="return confirm('Are you sure?')"> Delete</a></td>
+
+        </tr>
+        {% endfor %}
+
+        </table>
+        {% endif %}
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
