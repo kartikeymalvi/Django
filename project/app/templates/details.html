@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Details{% endblock %}
+
+{% block css %}
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .card {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #007BFF;
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.03);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tablet */
+        @media (max-width: 768px) {
+            .card {
+                margin: 20px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            p, .price {
+                font-size: 1rem;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            p, .price {
+                font-size: 0.95rem;
+            }
+        }
+
+    </style>
+    {% endblock %}
+{% block content %}
+
+
+    {% for i in item %}
+    <div class="card">
+        <img src="{{ i.image.url }}" alt="{{ i.name }}">
+        <h1>Destination-{{ i.destination }}</h1>
+        <p><strong>Description-</strong>{{ i.description }}</p>
+        <p><strong>Duration</strong>{{ i.duration }}</p>
+        <p> <strong>Itinerary-</strong>{{ i.itinerary }}</p>
+        <p> <strong>Inclusions-</strong>{{ i.inclusions }}</p>
+        <p><strong>Exclusions-</strong>{{ i.exclusions }}</p>
+        <p><strong>Availability-</strong>{{ i.available_from }}</p>
+        <p><strong>To -</strong>{{ i.available_to }}</p>
+        <h3 class="price">Price: {{ i.price }}</h3>
+
+        <form action="{% url 'book' userdata.id i.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Book Now</button>
+        </form>
+    </div>
+    {% endfor %}
+    {% endblock %}
+
+
+

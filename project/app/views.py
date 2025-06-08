@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import *
 from django.db.models import Q
 
@@ -129,9 +129,43 @@ def logindata(request):
      else:
           return render(request,'login.html')
 
-def package(request):
+def package(request,pk):
+    userdata = Student.objects.get(id=pk)
+    userdata = {
+        "id": userdata.id,
+        "username": userdata.username,
+        "phone": userdata.phone,
+        "dob": userdata.dob,
+        "email": userdata.email,
+        "image": userdata.profile_pic,
+        "file": userdata.resume,
+        "education": userdata.subscribe,
+        "password": userdata.password,
+    }
+    packages = Travel.objects.all()
+
+    return render(request, 'package.html', {'packages':packages,'userdata': userdata})
+
+
+def details(request,pk):
+    userdata=Student.objects.get(id=pk)
+    userdata={
+        "id": userdata.id,
+        "username": userdata.username,
+        "phone": userdata.phone,
+        "dob": userdata.dob,
+        "email": userdata.email,
+        "image": userdata.profile_pic,
+        "file": userdata.resume,
+        "education": userdata.subscribe,
+        "password": userdata.password,
+
+    }
+    item = Travel.objects.all()
+    return render(request, 'details.html', {'item': item,'userdata':userdata})
+
+
     
-    return render(request,'Package.html')
 
 def dashboard(request,pk):
     userdata=Student.objects.get(id=pk)
@@ -146,11 +180,13 @@ def dashboard(request,pk):
         "education":userdata.subscribe,
         "password":userdata.password,
         }
-    return render(request,'dashboard.html',{'userdata':userdata}) 
+    travel=Travel.objects.all()
+        
+    return render(request,'dashboard.html',{'userdata':userdata,'travel':travel}) 
 
 def first_5(request, pk):
     userdata = Student.objects.get(id=pk)
-    data = Travel.objects.all()[0:5]
+    data = Booking.objects.all()[0:5]
 
     userdata={
         "id":userdata.id,
@@ -163,15 +199,17 @@ def first_5(request, pk):
         "education":userdata.subscribe,
         "password":userdata.password,
     }
+    travels = Travel.objects.all()
     
     return render(request, 'dashboard.html', {
         'userdata': userdata,
-        'data': data
+        'data': data,
+        "travels":travels
     })
 
 def last_5(request, pk):
     userdata = Student.objects.get(id=pk)
-    data = Travel.objects.order_by('-id')[:5]
+    data = Booking.objects.order_by('-id')[:5]
     userdata={
         "id":userdata.id,
         "username":userdata.username,
@@ -183,16 +221,17 @@ def last_5(request, pk):
         "education":userdata.subscribe,
         "password":userdata.password,
     }
-    
+    travels = Travel.objects.all()
     return render(request, 'dashboard.html', {
         'userdata': userdata,
-        'data': data
+        'data': data,
+        "travels":travels
     })   
 
 
 def all_stu(request, pk):
     userdata = Student.objects.get(id=pk)
-    data = Travel.objects.all()
+    data = Booking.objects.all()
     userdata={
         "id":userdata.id,
         "username":userdata.username,
@@ -204,10 +243,12 @@ def all_stu(request, pk):
         "education":userdata.subscribe,
         "password":userdata.password,
     }
+    travels = Travel.objects.all()
     
     return render(request, 'dashboard.html', {
         'userdata': userdata,
-        'data': data
+        'data': data,
+        "travels":travels
     })
 
 def update(request,pk,pk1):
@@ -222,41 +263,49 @@ def update(request,pk,pk1):
         "file":userdata.resume,
         "education":userdata.subscribe,
         "password":userdata.password,
+    }
+  
+  updatedata=Booking.objects.get(id=pk1)
+  updatedata={
+    "id":updatedata.id,
+    "place":updatedata.place,
+    "user":updatedata.user,
+    "booked_at":updatedata.booked_at,
+    "price":updatedata.price,
+
   }
-  updatedata=Travel.objects.get(id=pk1)
-  return render(request,'dashboard.html',{'userdata':userdata,'updatedata':updatedata})
+  travels = Travel.objects.all()
+  
 
-def edit(request,pk,pk1):
-    name=request.POST.get('name')
-    email=request.POST.get('email')
-    contact=request.POST.get('contact')
-    dob=request.POST.get('dob')
-    
-    if request.method=='POST':
-        edit=Travel.objects.get(pk=pk1)
-        edit.username=name
-        edit.email=email
-        edit.contact=contact
-        edit.dob=dob
-        edit.save()
-        userdata=Student.objects.get(id=pk)
-        userdata={
-        "id":userdata.id,
-        "username":userdata.username,
-        "phone":userdata.phone,
-        "dob":userdata.dob,
-        "email":userdata.email,
-        "image":userdata.profile_pic,
-        "file":userdata.resume,
-        "education":userdata.subscribe,
-        "password":userdata.password,
+  return render(request,'dashboard.html',{'userdata':userdata,'updatedata':updatedata,"travels":travels})
 
-        }
-        return render(request,'dashboard.html',{'userdata': userdata})
+def edit(request, pk, pk1):
+    student = Student.objects.get(pk=pk)
+    booking = Booking.objects.get(pk=pk1)
+    travels = Travel.objects.all()
+
+    if request.method == 'POST':
+        trip_id = request.POST.get('trip')
+        price = request.POST.get('price')
+        dob = request.POST.get('dob')
+
+        booking.user = student
+        booking.place = Travel.objects.get(pk=trip_id)
+        booking.price = price
+        booking.booked_at = dob
+        booking.save()
+
+        return render(request,"dashboard.html",{
+        'userdata': student,
+        'updatedata': booking,
+        'travels': travels,
+        'data': Booking.objects.filter(user=student)
+    })  
+
 
 def delete(request,pk,pk1):
     print(pk,pk1)
-    delete=Travel.objects.get(id=pk1)
+    delete=Booking.objects.get(id=pk1)
     delete.delete()
     userdata=Student.objects.get(id=pk)
     userdata={
@@ -287,27 +336,71 @@ def adminpanel(request, pk):
     }
 
     return render(request, 'adminpanel.html', {'userdata': user_dict})
-def search(request,pk):
-    x=request.POST.get('search')
-    y=request.POST.get('name')
-    z=request.POST.get('date')
-    print(x)
-    # data=Travel.objects.filter(Q(username__icontains=x)|Q(email__icontains=x)|Q(contact__icontains=x)|Q(dob__icontains=x))
 
-    data=Travel.objects.filter(Q(username__icontains=y)|Q(email__icontains=x)|Q(contact__icontains=x)|Q(dob__icontains=z))
 
-    userdata=Student.objects.get(id=pk)
-    userdata={
-        "id": userdata.id,
-        "username": userdata.username,
-        "phone": userdata.phone,
-        "dob": userdata.dob,
-        "email": userdata.email,
-        "image": userdata.profile_pic,
-        "file": userdata.resume,
-        "education": userdata.subscribe,
-        "password": userdata.password,
-    }
-    return render(request,'dashboard.html',{'userdata': userdata,'data': data})
+# def search(request, pk):
+#     y = request.POST.get('name')  
+#     x = Booking.objects.filter(place=y)
+#     print(x)
+    
+#     # z = request.POST.get('date')
+#     # print(y,z)    # available_from (date)
+
+#     # filters = Q()
+
+
+#     # if y:
+#     #     filters |= Q(place__icontains=y)
+#     # if z:
+#     #     filters |= Q(booked_at__icontains=z)
+
+#     # data = Booking.objects.filter(filters)
+
+#     # userdata_obj = Student.objects.get(id=pk)
+#     # userdata = {
+#     #     "id": userdata_obj.id,
+#     #     "username": userdata_obj.username,
+#     #     "phone": userdata_obj.phone,
+#     #     "dob": userdata_obj.dob,
+#     #     "email": userdata_obj.email,
+#     #     "image": userdata_obj.profile_pic,
+#     #     "file": userdata_obj.resume,
+#     #     "education": userdata_obj.subscribe,
+#     #     "password": userdata_obj.password,
+#     # }
+
+#     # no_data_message = ""
+#     # if not data.exists():
+#     #     no_data_message = "No trips match your search."
+    
+#     # travels=Travel.objects.all()
+#     # return render(request, 'dashboard.html', {
+#     #     'userdata': userdata,
+#     #     'data': data,
+#     #     'no_data_message': no_data_message,
+#     #     "travels":travels
+#     # })
  
+def book(request, pk, pk1):
 
+    userdata = Student.objects.get(id=pk)
+    item = Travel.objects.get(id=pk1)
+
+    if request.method == 'POST':
+    
+        Booking.objects.create(
+        place=item,  # Travel object
+        user=userdata,
+        price=item.price
+        )
+
+        return render(request, 'checkout.html', {
+            'item': item,
+            'userdata': userdata
+        })
+
+    
+    return render(request, 'details.html', {
+        'item': [item],  # wrap in list so {% for i in item %} works in template
+        'userdata': userdata
+    })

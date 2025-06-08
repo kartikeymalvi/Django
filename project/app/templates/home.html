@@ -63,7 +63,15 @@
       <div style="padding: 20px;">
         <h2 style="margin: 0 0 10px;">Explore the World with Us</h2>
         <p style="color: #555;">Discover breathtaking destinations, unforgettable experiences, and hidden gems. Plan your dream vacation today with our easy-to-use travel packages, personalized just for you!</p>
-        <button style="margin-top: 10px; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;"><a href="{% url 'package' %} " style="text-decoration: none; color:white;">BOOK-NOW</a></button>
+        {% if userdata %}
+    
+        <button style="margin-top: 10px; padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;"> <a href="{% url 'package' userdata.id %}">BOOK NOW </a></button>
+    
+{% else %}
+    <!-- Hide or disable if userdata is not available -->
+    <button  style="margin-top: 10px; padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;"><a href="{% url 'registration' %}">Create account</a> </button>
+{% endif %}
+
       </div>
     </div>
 
@@ -72,7 +80,7 @@
       <div style="padding: 20px;">
         <h2 style="margin: 0 0 10px;">Escape to Paradise</h2>
         <p style="color: #555;">Relax on golden beaches, dive into crystal-clear waters, and soak up the sun. Your tropical adventure awaits — book your getaway to paradise today!</p>
-        <button style="margin-top: 10px; padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Top Destinations</button>
+        <button style="margin-top: 10px; padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;"><a href="{% url 'login' %}">Top Destinations</a></button>
       </div>
     </div>
 
@@ -81,7 +89,7 @@
       <div style="padding: 20px;">
         <h2 style="margin: 0 0 10px;">Adventure Awaits</h2>
         <p style="color: #555;">From mountain hikes to thrilling safaris, fuel your spirit of adventure with unforgettable journeys. Explore new cultures, stunning landscapes, and exciting experiences!</p>
-        <button style="margin-top: 10px; padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Explore </button>
+        <button style="margin-top: 10px; padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;"><a href="{% url 'login' %}">Explore</a> </button>
       </div>
     </div>
 
